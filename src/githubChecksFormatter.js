@@ -28,10 +28,12 @@ function annotationsForResults(results) {
   const files = results.filter((result) => result.messages.length > 0);
   let annotations = [];
 
+  let [basePath] = __dirname.split("node_modules");
+
   for (const file of files) {
     for (const message of file.messages) {
       const annotation = {
-        path: file.filePath,
+        path: file.filePath.substring(basePath.length),
         start_line: message.line,
         end_line: message.line,
         start_column: message.column,
