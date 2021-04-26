@@ -4,3 +4,5 @@
 # Jest output and cache files
 /tmp/jest_rs
 
+/dist/
+/.parcel-cache/
