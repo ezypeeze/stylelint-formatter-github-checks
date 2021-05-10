@@ -14,11 +14,7 @@ const summaryOfResults = (results) => {
     },
     { errors: 0, warnings: 0, fixableErrors: 0, fixableWarnings: 0 }
   );
-  summary.problems =
-    summary.errors +
-    summary.warnings +
-    summary.fixableErrors +
-    summary.fixableWarnings;
+  summary.problems = summary.errors + summary.warnings;
   summary.filesChecked = results.length;
 
   return summary;

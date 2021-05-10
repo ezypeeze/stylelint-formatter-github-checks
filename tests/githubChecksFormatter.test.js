@@ -2,6 +2,7 @@ import githubChecksFormatter from "../src/githubChecksFormatter";
 import { checkConclusion } from "../src/enums/checkConclusion";
 import checkStatus from "../src/enums/checkStatus";
 import multipleErrors from "./results/multipleErrors";
+import errorsIncludingFixable from "./results/errorsIncludingFixable";
 import successResult from "./results/success";
 
 describe("current time", () => {
@@ -134,5 +135,41 @@ describe("given multiple errors, the check", () => {
       expect(start_line).toBe(end_line);
       expect(start_column).toBe(end_column);
     }
+  });
+});
+
+describe("given both fixable and non-fixable errors, the check", () => {
+  let outputJson;
+
+  beforeAll(() => {
+    const output = githubChecksFormatter(errorsIncludingFixable);
+    outputJson = JSON.parse(output);
+  });
+
+  test("should return any output", () => {
+    expect(outputJson).toBeDefined();
+  });
+
+  it("should have all required parameters", () => {
+    expect(outputJson).toHaveProperty("status", checkStatus.COMPLETED);
+    expect(outputJson).toHaveProperty("completed_at");
+    expect(outputJson).toHaveProperty("conclusion");
+    expect(outputJson).toHaveProperty("output");
+    expect(outputJson).toHaveProperty("output.title");
+    expect(outputJson).toHaveProperty("output.summary");
+  });
+
+  test("should be a 'failure'", () => {
+    expect(outputJson).toHaveProperty("conclusion", checkConclusion.FAILURE);
+  });
+
+  test("should return annotations", () => {
+    expect(outputJson).toHaveProperty("output.annotations");
+    expect(outputJson.output.annotations).toHaveLength(3);
+  });
+
+  test("shouldn't count fixable errors twice in total problems", () => {
+    expect(outputJson).toHaveProperty("output.title");
+    expect(outputJson.output.title.substring(0, 1)).toBe("3");
   });
 });
