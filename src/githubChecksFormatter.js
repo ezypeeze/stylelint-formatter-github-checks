@@ -56,7 +56,6 @@ function annotationsForResults(results) {
 }
 
 const githubChecksFormatter = (results) => {
-  //asdfasdf
   const summary = summaryOfResults(results);
 
   const check = {
@@ -84,7 +83,7 @@ const githubChecksFormatter = (results) => {
     check.output = {
       title: `${summary.problems} problem(s) detected`,
       summary: `${summary.errors} errors and ${summary.warnings} warnings found.
-${summary.fixableErrors} errors and ${summary.fixableWarnings} warnings potentially fixable with the \`--fix\` option.`,
+      ${summary.fixableErrors} errors and ${summary.fixableWarnings} warnings potentially fixable with the \`--fix\` option.`,
     };
 
     if (summary.problems > 50) {
