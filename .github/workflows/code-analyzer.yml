@@ -1,0 +1,33 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup node 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+
+      - name: Install Dependencies 
+        run: yarn
+      
+      - name: Linting
+        run: yarn lint
+      
+      - name: Tests
+        run: yarn test
+      
+      - name: Coverage
+        run: yarn coverage -t ${{ secrets.CODECOV_TOKEN }}

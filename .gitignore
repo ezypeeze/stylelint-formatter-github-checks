@@ -1,8 +1,6 @@
 /.idea
+/.vscode
 /node_modules
-
-# Jest output and cache files
 /tmp/jest_rs
+coverage
 
-/dist/
-/.parcel-cache/
