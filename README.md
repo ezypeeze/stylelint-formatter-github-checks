@@ -1,4 +1,11 @@
 # stylelint-formatter-github-checks
+[![Build Status](https://travis-ci.org/ezypeeze/stylelint-formatter-github-checks.svg?branch=main)](https://travis-ci.org/ezypeeze/stylelint-formatter-github-checks)
+[![Current NPM Version](https://badge.fury.io/js/stylelint-formatter-github-checks.svg)](https://badge.fury.io/js/stylelint-formatter-github-checks)
+[![Dependencies](https://david-dm.org/ezypeeze/stylelint-formatter-github-checks.svg)](https://david-dm.org/ezypeeze/stylelint-formatter-github-checks.svg)
+[![Codecov](https://codecov.io/gh/ezypeeze/stylelint-formatter-github-checks/branch/main/graph/badge.svg)](https://codecov.io/gh/ezypeeze/stylelint-formatter-github-checks)
+[![Monthly Downloads](https://img.shields.io/npm/dm/stylelint-formatter-github-checks.svg)](https://img.shields.io/npm/dm/stylelint-formatter-github-checks.svg)
+[![Known Vulnerabilities](https://snyk.io/test/github/ezypeeze/stylelint-formatter-github-checks/badge.svg)](https://snyk.io/test/github/ezypeeze/stylelint-formatter-github-checks)
+
 
 > Forked from [daanleenders/eslint-formatter-github-checks](https://github.com/daanleenders/eslint-formatter-github-checks) & adapted for stylelint
 
