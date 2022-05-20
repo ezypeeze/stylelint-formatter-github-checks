@@ -2,6 +2,9 @@
 name: CI
 
 on:
+  push:
+    branches:
+    - main
   pull_request:
     branches:
     - main
@@ -18,7 +21,7 @@ jobs:
       - name: Install Dependencies 
         run: yarn
       - name: Linting
-        run: Lint code
+        run: yarn lint
       - name: Tests
         run: yarn test
       - name: Coverage
