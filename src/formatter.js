@@ -1,18 +1,14 @@
-import { checkConclusion } from "./enums/checkConclusion";
-import { checkStatus } from "./enums/checkStatus";
-import { annotationLevel } from "./enums/annotationLevel";
-import { messageSeverity } from "./enums/messageSeverity";
+const { checkConclusion, checkStatus, annotationLevel, messageSeverity } = require("./enums");
 
-const summaryOfResults = (results) => {
+function summaryOfResults(results) {
   const summary = results.reduce(
     (seq, current) => {
-      seq.errors += current.errorCount;
-      seq.warnings += current.warningCount;
-      seq.fixableErrors += current.fixableErrorCount;
-      seq.fixableWarnings += current.fixableWarningCount;
+      seq.errors += current.warnings.filter(warn => warn.severity === messageSeverity.ERROR).length;
+      seq.warnings += current.warnings.filter(warn => warn.severity === messageSeverity.WARNING).length;
+
       return seq;
     },
-    { errors: 0, warnings: 0, fixableErrors: 0, fixableWarnings: 0 }
+    { errors: 0, warnings: 0 }
   );
   summary.problems = summary.errors + summary.warnings;
   summary.filesChecked = results.length;
@@ -21,25 +17,25 @@ const summaryOfResults = (results) => {
 };
 
 function annotationsForResults(results) {
-  const files = results.filter((result) => result.messages.length > 0);
+  const files = results.filter((result) => result.warnings.length > 0);
   let annotations = [];
 
   let [basePath] = __dirname.split("node_modules");
 
   for (const file of files) {
-    for (const message of file.messages) {
+    for (const message of file.warnings) {
       const annotation = {
-        path: file.filePath.substring(basePath.length),
+        path: file.source.substring(basePath.length),
         start_line: message.line,
         end_line: message.line,
         start_column: message.column,
         end_column: message.column,
         annotation_level:
-          message.severity === messageSeverity.WARNING
+          message.errored === messageSeverity.WARNING
             ? annotationLevel.WARNING
             : annotationLevel.FAILURE,
-        message: message.message,
-        title: message.ruleId,
+        message: message.text,
+        title: message.rule,
       };
 
       annotations.push(annotation);
@@ -51,7 +47,9 @@ function annotationsForResults(results) {
   return annotations;
 }
 
-const githubChecksFormatter = (results) => {
+function formatter(results) {
+  results = results.filter(result => !result.ignored) // ignore "ignored" files
+
   const summary = summaryOfResults(results);
 
   const check = {
@@ -65,7 +63,7 @@ const githubChecksFormatter = (results) => {
     check.output = {
       title: "Nothing to check",
       summary:
-        "Eslint received no files or rules to check. Adjust your ESLint config to make sure it has files to check" +
+        "Stylelint received no files or rules to check. Adjust your Stylelint config to make sure it has files to check" +
         " and rules to check them by",
     };
   } else if (summary.problems === 0) {
@@ -78,8 +76,7 @@ const githubChecksFormatter = (results) => {
     check.conclusion = checkConclusion.FAILURE;
     check.output = {
       title: `${summary.problems} problem(s) detected`,
-      summary: `${summary.errors} errors and ${summary.warnings} warnings found.
-      ${summary.fixableErrors} errors and ${summary.fixableWarnings} warnings potentially fixable with the \`--fix\` option.`,
+      summary: `${summary.errors} errors and ${summary.warnings} warnings found. Potentially fixable with the \`--fix\` option.`,
     };
 
     if (summary.problems > 50) {
@@ -93,4 +90,4 @@ const githubChecksFormatter = (results) => {
   return JSON.stringify(check);
 };
 
-module.exports = githubChecksFormatter;
+module.exports = formatter;

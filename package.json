@@ -1,17 +1,14 @@
 {
-  "author": "Daan Leenders (https://github.com/daanleenders)",
+  "author": "Pedro Pereira (https://github.com/ezypeeze)",
   "babel": {
     "presets": [
       "@babel/preset-env"
     ]
   },
   "bugs": {
-    "url": "https://github.com/daanleenders/eslint-formatter-github-checks/issues"
+    "url": "https://github.com/daanleenders/stylelint-formatter-github-checks/issues"
   },
-  "directories": {
-    "lib": "./dist"
-  },
-  "description": "An ESLint formatter to use with [Github Checks](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-status-checks#checks). It outputs a json format that outputs the json needed for the ['Update a check run'](https://docs.github.com/en/rest/reference/checks#update-a-check-run) API call, so you can send the eslint output to github.",
+  "description": "An Stylelint formatter to use with [Github Checks](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-status-checks#checks). It outputs a json format that outputs the json needed for the ['Update a check run'](https://docs.github.com/en/rest/reference/checks#update-a-check-run) API call, so you can send the stylelint output to github.",
   "devDependencies": {
     "@babel/core": "*",
     "@babel/preset-env": "^7.13.15",
@@ -32,25 +29,23 @@
     }
   },
   "keywords": [
-    "eslint",
-    "eslint-formatter",
-    "eslintformatter",
+    "stylelint",
+    "stylelint-formatter",
+    "stylelintformatter",
     "github",
     "github-checks",
     "github-checks-api"
   ],
   "license": "MIT",
-  "main": "dist/githubChecksFormatter.js",
-  "name": "eslint-formatter-github-checks",
+  "main": "src/formatter.js",
+  "name": "stylelint-formatter-github-checks",
   "repository": {
     "type": "git",
-    "url": "git://github.com/daanleenders/eslint-formatter-github-checks.git"
+    "url": "git://github.com/ezypeeze/stylelint-formatter-github-checks.git"
   },
   "scripts": {
-    "start": "echo \"Error: should only be run as part of ESLint\" && exit 1",
-    "test": "jest",
-    "build": "parcel build src/githubChecksFormatter.js --no-content-hash --no-optimize --no-scope-hoist",
-    "prepublishOnly": "npm run build"
+    "start": "echo \"Error: should only be run as part of Stylelint\" && exit 1",
+    "test": "jest"
   },
   "version": "1.0.0"
 }

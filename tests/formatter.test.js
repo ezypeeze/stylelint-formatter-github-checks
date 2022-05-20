@@ -1,9 +1,7 @@
-import githubChecksFormatter from "../src/githubChecksFormatter";
-import { checkConclusion } from "../src/enums/checkConclusion";
-import checkStatus from "../src/enums/checkStatus";
-import multipleErrors from "./results/multipleErrors";
-import errorsIncludingFixable from "./results/errorsIncludingFixable";
-import successResult from "./results/success";
+import formatter from "../src/formatter";
+import { checkConclusion, checkStatus } from "../src/enums";
+import errorsLintResult from "./fixtures/errors";
+import successLintResult from "./fixtures/success";
 
 describe("current time", () => {
   const expectedDate = "2021-04-25T23:27:14Z";
@@ -22,7 +20,7 @@ describe("current time", () => {
   beforeAll(() => {
     mockDate(expectedDate);
 
-    const output = githubChecksFormatter([]);
+    const output = formatter([]);
     outputJson = JSON.parse(output);
 
     global.Date = RealDate;
@@ -37,7 +35,7 @@ describe("given no linted files (empty result set), the check", () => {
   let outputJson;
 
   beforeAll(() => {
-    const output = githubChecksFormatter([]);
+    const output = formatter([]);
     outputJson = JSON.parse(output);
   });
 
@@ -63,7 +61,7 @@ describe("given no errors, the check", () => {
   let outputJson;
 
   beforeAll(() => {
-    const output = githubChecksFormatter(successResult);
+    const output = formatter(successLintResult);
     outputJson = JSON.parse(output);
   });
 
@@ -89,7 +87,7 @@ describe("given multiple errors, the check", () => {
   let outputJson;
 
   beforeAll(() => {
-    const output = githubChecksFormatter(multipleErrors);
+    const output = formatter(errorsLintResult);
     outputJson = JSON.parse(output);
   });
 
@@ -112,7 +110,7 @@ describe("given multiple errors, the check", () => {
 
   test("should return annotations", () => {
     expect(outputJson).toHaveProperty("output.annotations");
-    expect(outputJson.output.annotations).toHaveLength(2);
+    expect(outputJson.output.annotations).toHaveLength(3); // total is 4, but one file entry is ignored
   });
 
   test("'s annotations should have all required parameters", () => {
@@ -135,41 +133,5 @@ describe("given multiple errors, the check", () => {
       expect(start_line).toBe(end_line);
       expect(start_column).toBe(end_column);
     }
-  });
-});
-
-describe("given both fixable and non-fixable errors, the check", () => {
-  let outputJson;
-
-  beforeAll(() => {
-    const output = githubChecksFormatter(errorsIncludingFixable);
-    outputJson = JSON.parse(output);
-  });
-
-  test("should return any output", () => {
-    expect(outputJson).toBeDefined();
-  });
-
-  it("should have all required parameters", () => {
-    expect(outputJson).toHaveProperty("status", checkStatus.COMPLETED);
-    expect(outputJson).toHaveProperty("completed_at");
-    expect(outputJson).toHaveProperty("conclusion");
-    expect(outputJson).toHaveProperty("output");
-    expect(outputJson).toHaveProperty("output.title");
-    expect(outputJson).toHaveProperty("output.summary");
-  });
-
-  test("should be a 'failure'", () => {
-    expect(outputJson).toHaveProperty("conclusion", checkConclusion.FAILURE);
-  });
-
-  test("should return annotations", () => {
-    expect(outputJson).toHaveProperty("output.annotations");
-    expect(outputJson.output.annotations).toHaveLength(3);
-  });
-
-  test("shouldn't count fixable errors twice in total problems", () => {
-    expect(outputJson).toHaveProperty("output.title");
-    expect(outputJson.output.title.substring(0, 1)).toBe("3");
   });
 });
